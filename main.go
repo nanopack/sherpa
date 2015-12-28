@@ -1,17 +1,9 @@
 //
 package main
 
-import (
-	"fmt"
+import "github.com/nanopack/sherpa/commands"
 
-	"github.com/nanopack/sherpa/api"
-)
-
-//
+// start up the CLI
 func main() {
-
-	//
-	if err := api.Start(""); err != nil {
-		fmt.Println("FAILED TO START!", err.Error())
-	}
+	commands.SherpaCmd.Execute()
 }

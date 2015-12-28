@@ -12,7 +12,7 @@ import (
 )
 
 // Start creates a new http server listner
-func Start(port string) error {
+func Start() error {
 
 	//
 	routes, err := registerRoutes()
@@ -20,15 +20,11 @@ func Start(port string) error {
 		return err
 	}
 
-	if port == "" {
-		port = ":1234"
-	}
-
 	//
-	config.Log.Info("Starting sherpa server (listening on port %v)...\n", port)
+	config.Log.Info("Starting sherpa server (listening on port %v)...\n", config.Options.Port)
 
 	// blocking...
-	if err := http.ListenAndServe(port, routes); err != nil {
+	if err := http.ListenAndServe(config.Options.Port, routes); err != nil {
 		return err
 	}
 
@@ -37,7 +33,7 @@ func Start(port string) error {
 
 // registerRoutes registers all api routes with the router
 func registerRoutes() (*pat.Router, error) {
-	config.Log.Debug("[nanobox/api] Registering routes...\n")
+	config.Log.Debug("[sherpa/api] Registering routes...\n")
 
 	//
 	router := pat.New()
@@ -47,15 +43,17 @@ func registerRoutes() (*pat.Router, error) {
 		rw.Write([]byte("pong"))
 	})
 
-	// frames
-	router.Get("/frames", handleRequest(getFrames))
-	router.Post("/frames", handleRequest(postFrame))
-	router.Get("/frames/{id}", handleRequest(getFrame))
+	// templates
+	router.Delete("/templates/{id}", handleRequest(deleteTemplate))
+	router.Get("/templates/{id}", handleRequest(getTemplate))
+	router.Post("/templates", handleRequest(postTemplate))
+	router.Get("/templates", handleRequest(getTemplates))
 
 	// builds
-	router.Get("/builds", handleRequest(getBuilds))
-	router.Post("/builds", handleRequest(postBuild))
+	router.Delete("/builds/{id}", handleRequest(deleteBuild))
 	router.Get("/builds/{id}", handleRequest(getBuild))
+	router.Post("/builds", handleRequest(postBuild))
+	router.Get("/builds", handleRequest(getBuilds))
 
 	return router, nil
 }

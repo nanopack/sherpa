@@ -22,3 +22,9 @@ _testmain.go
 *.exe
 *.test
 *.prof
+
+# Project specific files
+.DS_Store
+TODO
+sherpa
+sherpa.yaml
