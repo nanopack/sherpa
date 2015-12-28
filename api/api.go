@@ -22,11 +22,7 @@ func Start() error {
 	config.Log.Info("Starting sherpa server (listening on port %v)...\n", config.Options.Port)
 
 	// blocking...
-	if err := http.ListenAndServe(config.Options.Port, routes); err != nil {
-		return err
-	}
-
-	return nil
+	return http.ListenAndServe(config.Options.Port, routes)
 }
 
 // registerRoutes registers all api routes with the router
